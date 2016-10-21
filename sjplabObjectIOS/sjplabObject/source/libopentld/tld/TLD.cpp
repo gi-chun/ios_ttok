@@ -149,14 +149,11 @@ void TLD::processImage(const Mat &img)
 {
     storeCurrentData();
     
-//    Mat grey_frame;
-//    cvtColor(img, grey_frame, CV_BGR2GRAY);
-//    
-//    currImg = grey_frame; // Store new image , right after storeCurrentData();
+    Mat grey_frame;
+    cvtColor(img, grey_frame, CV_BGR2GRAY);
     
-    
-    currImg = img; // Store new image , right after storeCurrentData();
-
+    currImg = grey_frame; // Store new image , right after storeCurrentData();
+   
     if(trackerEnabled)
     {
         medianFlowTracker->track(prevImg, currImg, prevBB);
@@ -164,8 +161,7 @@ void TLD::processImage(const Mat &img)
 
     if(detectorEnabled && (!alternating || medianFlowTracker->trackerBB == NULL))
     {
-//        detectorCascade->detect(grey_frame);
-        detectorCascade->detect(img);
+        detectorCascade->detect(grey_frame);
     }
 
     fuseHypotheses();

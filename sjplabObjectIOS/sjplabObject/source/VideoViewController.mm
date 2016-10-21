@@ -528,10 +528,10 @@ using namespace cv;
     [self get_use_algorithim:luseKeypoints useLearning:luseLearning];
     //NSLog(@"luseKeypoints:%ld == luseLearning:%ld", luseKeypoints, luseLearning);
     
-    if(luseLearning){
-        cvtColor(dst, im_gray, CV_BGR2GRAY);
-        //cvtColor(image, im_gray, CV_BGR2GRAY);
-    }
+//    if(luseLearning){
+//        cvtColor(dst, im_gray, CV_BGR2GRAY);
+//        //cvtColor(image, im_gray, CV_BGR2GRAY);
+//    }
     if(luseKeypoints){
         cvtColor(dst, cmt_im_gray, CV_BGR2GRAY);
         //cvtColor(image, cmt_im_gray, CV_BGR2GRAY);
@@ -565,10 +565,14 @@ using namespace cv;
             r.height = r.height * resize_size.height / kScreenBoundsHeight;
 
             if(luseLearning){
-                main->tld->detectorCascade->imgWidth = im_gray.cols;
-                main->tld->detectorCascade->imgHeight = im_gray.rows;
-                main->tld->detectorCascade->imgWidthStep = im_gray.step;
-                main->tld->selectObject(im_gray, &r);
+                
+                Mat grey;
+                cvtColor(dst, grey, CV_BGR2GRAY);
+                
+                main->tld->detectorCascade->imgWidth = grey.cols;
+                main->tld->detectorCascade->imgHeight = grey.rows;
+                main->tld->detectorCascade->imgWidthStep = grey.step;
+                main->tld->selectObject(grey, &r);
             }
             
             if(luseKeypoints){
@@ -582,9 +586,8 @@ using namespace cv;
             firstStep = 0;
         }
         
-        //main->tld->processImage(dst);
         if(luseLearning)
-            main->tld->processImage(im_gray);
+            main->tld->processImage(dst);
         
         if(main->cmt_tracking){
             if(luseKeypoints)
