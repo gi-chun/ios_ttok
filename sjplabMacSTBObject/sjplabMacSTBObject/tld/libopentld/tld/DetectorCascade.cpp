@@ -42,18 +42,18 @@ DetectorCascade::DetectorCascade()
 {
     objWidth = -1; //MUST be set before calling init
     objHeight = -1; //MUST be set before calling init
-    useShift = 1;
+    useShift = 1; //1
     imgHeight = -1;
     imgWidth = -1;
 
     shift = 0.1;
     minScale = -10;
     maxScale = 10;
-    minSize = 25;
+    minSize = 25; //25
     imgWidthStep = -1;
 
     numTrees = 10;
-    numFeatures = 13;
+    numFeatures = 10;
 
     initialised = false;
 

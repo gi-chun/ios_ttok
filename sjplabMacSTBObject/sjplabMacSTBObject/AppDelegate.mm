@@ -40,7 +40,7 @@
     
     //test
     [[NSUserDefaults standardUserDefaults] setInteger:2 forKey:cdisplay_optionNo]; // 2: 1280 * 720 1: 640 * 480
-    [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:cprocessing_optionNo]; // 352 * 288 : 1 , 2: 640 * 480
+    [[NSUserDefaults standardUserDefaults] setInteger:4 forKey:cprocessing_optionNo]; // 352 * 288 : 1 , 2: 640 * 480 4: 1280 * 720
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {

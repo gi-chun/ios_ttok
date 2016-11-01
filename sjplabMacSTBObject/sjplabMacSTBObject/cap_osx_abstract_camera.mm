@@ -122,7 +122,7 @@
         // set camera default configuration
         self.defaultAVCaptureDevicePosition = AVCaptureDevicePositionFront;
         self.defaultAVCaptureVideoOrientation = AVCaptureVideoOrientationLandscapeLeft;
-        self.defaultFPS = 15;
+        self.defaultFPS = 30;
         self.defaultAVCaptureSessionPreset = AVCaptureSessionPreset640x480;
         
         NSLog(@"camera defaultAVCaptureSessionPreset defaultAVCaptureSessionPreset");

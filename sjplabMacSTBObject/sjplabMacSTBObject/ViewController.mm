@@ -105,7 +105,10 @@ using namespace cv;
     //self.view.layer.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 1.0);
 
     main = new Main();
-//    gui = new tld::Gui();
+    Config config;
+    config.configure(main);
+    
+    //    gui = new tld::Gui();
 //    main->gui = gui;
 //    srand(main->seed);
 
@@ -157,6 +160,8 @@ using namespace cv;
     cv::Size display_size = [self get_display_resize_size];
     
     resize(image, dst, cv::Size(resize_size.width,resize_size.height));
+    //resize(image, image, cv::Size(display_size.width,display_size.height));
+    
     //    resize(image, dst, cv::Size(320,180));
     
     //get use algorithm
@@ -268,6 +273,12 @@ using namespace cv;
         if(!objecttracking && mousedrag){
             
             cv::Rect r = cv::Rect(roitopleft.x, roitopleft.y, roibottomright.x - roitopleft.x, roibottomright.y - roitopleft.y);
+           
+//            r.x = r.x * videoView.frame.size.width / resize_size.width;
+//            r.y = r.y * videoView.frame.size.height / resize_size.height;
+//            r.width = r.width * videoView.frame.size.width / resize_size.width;
+//            r.height = r.height * videoView.frame.size.height / resize_size.height;
+            
             r.x = r.x * display_size.width / videoView.frame.size.width;
             r.y = r.y * display_size.height / videoView.frame.size.height;
             r.width = r.width * display_size.width / videoView.frame.size.width;
@@ -276,6 +287,48 @@ using namespace cv;
             cv:rectangle(image, r, CV_RGB(0,255,0), 2);
             //NSLog(@"topleft x:%d,y:%d bottomright x:%d,y:%d", roitopleft.x, roitopleft.y, roibottomright.x, roibottomright.y);
         }
+        
+        if(cmt.hasResult && main->cmt_tracking){
+            for(int i = 0; i<cmt.trackedKeypoints.size(); i++){
+                
+                CvPoint nPoint = cmt.trackedKeypoints[i].first.pt;
+                nPoint.x = nPoint.x * display_size.width / resize_size.width;
+                nPoint.y = nPoint.y * display_size.height / resize_size.height;
+//                nPoint.x = nPoint.x * display_size.width / videoView.frame.size.width;
+//                nPoint.y = nPoint.y * display_size.height / videoView.frame.size.height;
+                
+                //cvCircle(img, cmt.trackedKeypoints[i].first.pt, 3, cv::Scalar(255,255,255));
+                //cvCircle(img, nPoint, 3, cv::Scalar(255,255,255));
+                cv::circle(image, nPoint, 3, cv::Scalar(255,255,255));
+            }
+            
+            CvPoint topleft = cvPoint(cmt.boundingbox.x, cmt.boundingbox.y);
+            CvPoint bottomRight = cvPoint(cmt.boundingbox.x+cmt.boundingbox.width, cmt.boundingbox.y+cmt.boundingbox.height);
+            
+            topleft.x = topleft.x * display_size.width / resize_size.width;
+            topleft.y = topleft.y * display_size.height / resize_size.height;
+            bottomRight.x = bottomRight.x * display_size.width / resize_size.width;
+            bottomRight.y = bottomRight.y * display_size.height / resize_size.height;
+            
+//            topleft.x = topleft.x * resize_size.width / videoView.frame.size.width;
+//            topleft.y = topleft.y * resize_size.height / videoView.frame.size.height;
+//            bottomRight.x = bottomRight.x * resize_size.width / videoView.frame.size.width;
+//            bottomRight.y = bottomRight.y * resize_size.height / videoView.frame.size.height;
+            
+            cv::rectangle(image, topleft, bottomRight, Scalar(0,0,255), 1, 4);
+            
+            //draw some crosshairs around the object
+            int x, y = 0;
+            x = topleft.x+(bottomRight.x-topleft.x)/2;
+            y = topleft.y+(bottomRight.y-topleft.y)/2;
+            
+            cv::circle(image,cv::Point(x,y),10,Scalar(0,255,0),1);
+            cv::line(image,cv::Point(x,y),cv::Point(x,y-15),Scalar(0,255,0),1);
+            cv::line(image,cv::Point(x,y),cv::Point(x,y+15),Scalar(0,255,0),1);
+            cv::line(image,cv::Point(x,y),cv::Point(x-15,y),Scalar(0,255,0),1);
+            cv::line(image,cv::Point(x,y),cv::Point(x+15,y),Scalar(0,255,0),1);
+        }
+        
         //end draw roi rect
         if(main->tld->currBB != NULL)
         {
@@ -287,10 +340,15 @@ using namespace cv;
             CvPoint bottomRight = cvPoint(main->tld->currBB->x+main->tld->currBB->width, main->tld->currBB->y+main->tld->currBB->height);
             
             cv::Rect r = cv::Rect(topleft.x, topleft.y, bottomRight.x - topleft.x, bottomRight.y - topleft.y);
-            r.x = r.x * displaySize.width / resize_size.width;
-            r.y = r.y * displaySize.height / resize_size.height;
-            r.width = r.width * displaySize.width / resize_size.width;
-            r.height = r.height * displaySize.height / resize_size.height;
+            r.x = r.x * display_size.width / resize_size.width;
+            r.y = r.y * display_size.height / resize_size.height;
+            r.width = r.width * display_size.width / resize_size.width;
+            r.height = r.height * display_size.height / resize_size.height;
+            
+//            r.x = r.x * resize_size.width / videoView.frame.size.width;
+//            r.y = r.y * resize_size.height / videoView.frame.size.height;
+//            r.width = r.width * resize_size.width / videoView.frame.size.width;
+//            r.height = r.height * resize_size.height / videoView.frame.size.height;
             
             //cvRectangle(img, main->tld->currBB->tl(), main->tld->currBB->br(), rectangleColor, 8, 8, 0);
             //cvRectangle(img, topleft, bottomRight, rectangleColor, 4, 8, 0);

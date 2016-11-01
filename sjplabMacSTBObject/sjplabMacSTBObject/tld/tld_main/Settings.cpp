@@ -52,11 +52,11 @@ Settings::Settings() :
     m_lastFrame(0),
     m_minScale(-10),
     m_maxScale(10),
-    m_numFeatures(13),
+    m_numFeatures(10), //13 -> 10
     m_numTrees(10),
-    m_thetaP(0.65),
-    m_thetaN(0.5),
-    m_minSize(25),
+    m_thetaP(0.50), //0.65 -> 0.
+    m_thetaN(0.4),  //0.5 -> 0.4
+    m_minSize(100),  // 25 -> 100
     m_camNo(0),
     m_fps(24),
     m_seed(0),
